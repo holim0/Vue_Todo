@@ -8,13 +8,12 @@
 
             <i @click="onDelete" class="fas fa-times"></i>
         </h3>
-        <div>{{ task.date.toString() }}</div>
+        <div>{{ task.date }}</div>
     </div>
 </template>
 <script>
 export default {
     name: "Task",
-
     props: {
         task: Object,
     },
