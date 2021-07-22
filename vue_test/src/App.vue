@@ -20,6 +20,7 @@
 import Header from "./components/Header.vue";
 import Tasks from "./components/Tasks.vue";
 import AddTask from "./components/AddTask.vue";
+import axios from "axios";
 
 export default {
     components: { Header, Tasks, AddTask },
@@ -34,7 +35,15 @@ export default {
     },
 
     methods: {
-        deleteTask(id) {
+        async deleteTask(id) {
+            try {
+                const res = await axios.delete(`/api/tasks/${id}`);
+
+                console.log(res);
+            } catch (err) {
+                console.log(err);
+            }
+
             this.tasks = this.tasks.filter((task) => {
                 return task.id !== id;
             });
@@ -49,36 +58,34 @@ export default {
             });
         },
 
-        addTask(task) {
+        async addTask(task) {
+            try {
+                const res = await axios.post("/api/tasks", task);
+
+                console.log(res);
+            } catch (err) {
+                console.log(err);
+            }
+
             this.tasks = [...this.tasks, task];
         },
 
         toggleAdd() {
             this.showAddTask = !this.showAddTask;
         },
+
+        async fetchTask() {
+            try {
+                const res = await axios.get("/api/tasks");
+                return res.data;
+            } catch (err) {
+                console.log(err);
+            }
+        },
     },
 
-    created() {
-        this.tasks = [
-            {
-                text: "밥 먹기",
-                date: new Date(),
-                reminder: true,
-                id: 1,
-            },
-            {
-                text: "잠 자기",
-                date: new Date(),
-                reminder: true,
-                id: 2,
-            },
-            {
-                text: "공부 하기",
-                date: new Date(),
-                reminder: false,
-                id: 3,
-            },
-        ];
+    async created() {
+        this.tasks = await this.fetchTask();
     },
 };
 </script>
